@@ -11,8 +11,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
-      <Filter>ECS</Filter>
-    </ClCompile>
+    <ClCompile Include="Source.cpp" />
   </ItemGroup>
 </Project>

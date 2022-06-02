@@ -1,4 +1,5 @@
 
 dependencies/glut/
 dependencies/xcore/
+build/Project/x64
 Executable
