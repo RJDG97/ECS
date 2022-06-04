@@ -114,6 +114,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>../../src;$(VC_IncludePath);$(WindowsSDK_IncludePath);Settings;../../dependencies/glut/include</IncludePath>
+    <OutDir>$(SolutionDir)..\..\Executable\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
