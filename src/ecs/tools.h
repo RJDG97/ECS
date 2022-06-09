@@ -1,4 +1,4 @@
-namespace xecs::tools
+namespace ecs::tools
 {
     using empty_lambda = decltype([]() {});
 
@@ -16,6 +16,6 @@ namespace xecs::tools
         template< typename... T_COMPONENTS > __inline
         void AddFromComponents( void ) noexcept;
 
-        std::array<std::uint64_t, ((xecs::settings::max_component_types_v-1)/64)+1> m_Bits{};
+        std::array<std::uint64_t, ((ecs::settings::max_component_types_v-1)/64)+1> m_Bits{};
     };
 }

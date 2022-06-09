@@ -1,4 +1,4 @@
-namespace xecs::settings
+namespace ecs::settings
 {
     constexpr auto max_component_types_v            = 128;
     constexpr auto max_components_per_entity_v      = 32;

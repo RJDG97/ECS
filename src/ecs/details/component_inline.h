@@ -1,4 +1,4 @@
-namespace xecs::component
+namespace ecs::component
 {
     namespace details
     {
@@ -7,8 +7,8 @@ namespace xecs::component
         {
             return info
             {
-                .m_UID          = info::invalid_id_v
-            ,   .m_Size         = static_cast<std::uint32_t>(sizeof(T))
+                .m_UID = info::invalid_id_v
+            ,   .m_Size = static_cast<std::uint32_t>(sizeof(T))
                 // Constructor pointer
             ,   .m_pConstructFn = std::is_trivially_constructible_v<T>      
                     ? nullptr : []( std::byte* p ) noexcept 

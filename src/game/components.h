@@ -18,7 +18,7 @@ struct timer
     float m_Value{};
 };
 
-struct bullet
-{
-    xecs::component::entity m_ShipOwner;
-};
+//struct bullet
+//{
+//    xecs::component::entity m_ShipOwner;
+//};

@@ -1,6 +1,5 @@
-#ifndef XECS_H
-#define XECS_H
-#pragma once
+#ifndef ECS_H
+#define ECS_H
 
 //--------------------------------------------------------------
 // HEADER FILES
@@ -25,7 +24,7 @@
 //--------------------------------------------------------------
 // PREDEFINITIONS
 //--------------------------------------------------------------
-namespace xecs::game_mgr
+namespace ecs::game_mgr
 {
     struct instance;
 }
@@ -33,26 +32,27 @@ namespace xecs::game_mgr
 //--------------------------------------------------------------
 // FILES
 //--------------------------------------------------------------
-#include "xecs_settings.h"
-#include "xecs_event.h"
-#include "xecs_component.h"
-#include "xecs_tools.h"
-#include "xecs_pool.h"
-#include "xecs_archetype.h"
-#include "xecs_query.h"
-#include "xecs_system.h"
-#include "xecs_Game_mgr.h"
+#include "settings.h"
+//#include "xecs_event.h"
+#include "component.h"
+#include "entity.h"
+#include "tools.h"
+#include "pool.h"
+#include "archetype.h"
+//#include "xecs_query.h"
+#include "system.h"
+//#include "xecs_Game_mgr.h"
 
 //--------------------------------------------------------------
 // INLINE FILES
 //--------------------------------------------------------------
-#include "details/xecs_component_inline.h"
-#include "details/xecs_system_inline.h"
-#include "details/xecs_pool_inline.h"
-#include "details/xecs_archetype_inline.h"
-#include "details/xecs_Game_mgr_inline.h"
-#include "details/xecs_query_inline.h"
-#include "details/xecs_tools_inline.h"
-#include "details/xecs_event_inline.h"
+#include "details/component_inline.h"
+#include "details/system_inline.h"
+#include "details/pool_inline.h"
+#include "details/archetype_inline.h"
+//#include "details/xecs_Game_mgr_inline.h"
+//#include "details/xecs_query_inline.h"
+#include "details/tools_inline.h"
+//#include "details/xecs_event_inline.h"
 
 #endif

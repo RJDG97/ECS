@@ -1,4 +1,4 @@
-namespace xecs::system
+namespace ecs::system
 {
     //-----------------------------------------------------------------
     // ECS USER DEFINITIONS
@@ -13,40 +13,43 @@ namespace xecs::system
 
     struct instance : overrides
     {
-        using entity = xecs::component::entity;
+        using entity = ecs::entity::instance;
 
         instance( const instance& ) noexcept = delete;
 
         inline      
-        instance( xecs::game_mgr::instance& GameMgr ) noexcept;
+        instance(ecs::game_mgr::instance& GameMgr) noexcept
+            : m_GameMgr(GameMgr) {}
 
-        xecs::game_mgr::instance& m_GameMgr;
+        ecs::game_mgr::instance& m_GameMgr;
     };
 
     //-----------------------------------------------------------------
     // ECS SYSTEM DEFINITIONS
     //-----------------------------------------------------------------
-    struct mgr final
+    class mgr final
     {
-        struct info
-        {
-            using call_run = void( xecs::system::instance&);
-
-            std::unique_ptr<xecs::system::instance> m_System;
-            call_run*                               m_CallRun;
-            const char*                             m_pName;
-        };
-
         mgr( const mgr& ) noexcept = delete;
 
         mgr( void ) noexcept = default;
 
-        template< typename T_SYSTEM > 
-            requires( std::derived_from< T_SYSTEM, xecs::system::instance> )
-        T_SYSTEM& RegisterSystem( xecs::game_mgr::instance& GameMgr ) noexcept;
+        template < typename T_SYSTEM > 
+            requires( std::derived_from< T_SYSTEM, ecs::system::instance> )
+        void RegisterSystem( ecs::game_mgr::instance& GameMgr ) noexcept;
 
         inline 
         void Run( void) noexcept;
+
+    private:
+
+        struct info
+        {
+            using call_run = void(ecs::system::instance&);
+
+            std::unique_ptr<ecs::system::instance> m_System;
+            call_run* m_CallRun;
+            const char* m_pName;
+        };
 
         std::vector< info >  m_Systems;
     };

@@ -1,4 +1,4 @@
-#include "xecs/xecs.h"
+#include "ecs/ecs.h"
 #include "Game/game.h"
 
 //---------------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ int main(int argc, char** argv)
     glutCreateWindow(xcore::get().m_pAppName);
     glutDisplayFunc([]
         {
-            s_AsteroidGame.m_GameMgr->Run();
+            // s_AsteroidGame.m_GameMgr->Run();
         });
     glutReshapeFunc([](int w, int h)
         {
