@@ -29,6 +29,7 @@ namespace ecs::system
     //-----------------------------------------------------------------
     class mgr final
     {
+    public:
         mgr( const mgr& ) noexcept = delete;
 
         mgr( void ) noexcept = default;

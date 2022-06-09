@@ -71,11 +71,13 @@
     <ClInclude Include="..\..\src\ecs\details\archetype_inline.h" />
     <ClInclude Include="..\..\src\ecs\details\component_inline.h" />
     <ClInclude Include="..\..\src\ecs\details\entity_inline.h" />
+    <ClInclude Include="..\..\src\ecs\details\game_mgr_inline.h" />
     <ClInclude Include="..\..\src\ecs\details\system_inline.h" />
     <ClInclude Include="..\..\src\ecs\details\pool_inline.h" />
     <ClInclude Include="..\..\src\ecs\details\tools_inline.h" />
     <ClInclude Include="..\..\src\ecs\ecs.h" />
     <ClInclude Include="..\..\src\ecs\entity.h" />
+    <ClInclude Include="..\..\src\ecs\game_mgr.h" />
     <ClInclude Include="..\..\src\ecs\pool.h" />
     <ClInclude Include="..\..\src\ecs\settings.h" />
     <ClInclude Include="..\..\src\ecs\system.h" />

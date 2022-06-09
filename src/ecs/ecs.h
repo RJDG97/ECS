@@ -41,7 +41,7 @@ namespace ecs::game_mgr
 #include "archetype.h"
 //#include "xecs_query.h"
 #include "system.h"
-//#include "xecs_Game_mgr.h"
+#include "Game_mgr.h"
 
 //--------------------------------------------------------------
 // INLINE FILES
@@ -50,7 +50,7 @@ namespace ecs::game_mgr
 #include "details/system_inline.h"
 #include "details/pool_inline.h"
 #include "details/archetype_inline.h"
-//#include "details/xecs_Game_mgr_inline.h"
+#include "details/Game_mgr_inline.h"
 //#include "details/xecs_query_inline.h"
 #include "details/tools_inline.h"
 //#include "details/xecs_event_inline.h"
