@@ -38,23 +38,22 @@ namespace ecs::game_mgr
 
         inline 
         ecs::entity::instance AllocNewEntity
-        (   
-            int                        PoolIndex, 
-            ecs::archetype::instance& Archetype
+        ( 
+            int PoolIndex, 
+            ecs::archetype::instance& Archetype 
         ) noexcept;
 
         //---------------------------------------------------------------------------
 
         inline 
-        const entity_info& getEntityDetails        
-        (   
-            ecs::entity::instance Entity
-        ) const noexcept;
+        const entity_info& getEntityDetails
+        ( ecs::entity::instance Entity ) const noexcept;
 
         //---------------------------------------------------------------------------
 
         inline 
-        void DeleteEntity(ecs::entity::instance& Entity ) noexcept;
+        void DeleteEntity
+        ( ecs::entity::instance& Entity ) noexcept;
 
         //---------------------------------------------------------------------------
 
@@ -67,9 +66,7 @@ namespace ecs::game_mgr
         //---------------------------------------------------------------------------
 
         inline void SystemDeleteEntity
-        ( 
-            ecs::entity::instance DeletedEntity
-        ) noexcept;
+        ( ecs::entity::instance DeletedEntity ) noexcept;
 
         //---------------------------------------------------------------------------
 
@@ -83,32 +80,26 @@ namespace ecs::game_mgr
 
         //---------------------------------------------------------------------------
 
-        //inline
-        //std::vector<archetype::instance*> Search
-        //( 
-        //    std::span<const component::info* const> Types 
-        //) const noexcept;
+        template < typename... T_COMPONENTS >
+        std::vector<archetype::instance*> Search
+        (const ecs::query::instance& Query) const noexcept;
 
-        ////---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
 
-        //template < typename... T_COMPONENTS >
-        //std::vector<archetype::instance*> Search( void ) const noexcept;
+        template< typename... T_COMPONENTS >
+        std::vector<archetype::instance*> Search
+        (std::span<const component::info* const> Types) const noexcept;
 
-        ////---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
 
-        //template < typename... T_COMPONENTS >
-        //std::vector<archetype::instance*> Search                  
-        //( 
-        //    const ecs::query::instance& Query 
-        //) const noexcept;
+        template < typename... T_COMPONENTS >
+        std::vector<archetype::instance*> Search(void) const noexcept;
 
         //---------------------------------------------------------------------------
 
         inline
-        archetype::instance& getOrCreateArchetype    
-        ( 
-            std::span<const component::info* const> Types 
-        ) noexcept;
+        archetype::instance& getOrCreateArchetype
+        ( std::span<const component::info* const> Types ) noexcept;
 
         //---------------------------------------------------------------------------
 

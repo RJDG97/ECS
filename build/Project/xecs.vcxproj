@@ -70,11 +70,12 @@
     <ClInclude Include="..\..\src\ecs\component.h" />
     <ClInclude Include="..\..\src\ecs\details\archetype_inline.h" />
     <ClInclude Include="..\..\src\ecs\details\component_inline.h" />
-    <ClInclude Include="..\..\src\ecs\details\entity_inline.h" />
     <ClInclude Include="..\..\src\ecs\details\game_mgr_inline.h" />
     <ClInclude Include="..\..\src\ecs\details\system_inline.h" />
     <ClInclude Include="..\..\src\ecs\details\pool_inline.h" />
     <ClInclude Include="..\..\src\ecs\details\tools_inline.h" />
+    <ClInclude Include="..\..\src\ecs\details\event_inline.h" />
+    <ClInclude Include="..\..\src\ecs\details\query_inline.h" />
     <ClInclude Include="..\..\src\ecs\ecs.h" />
     <ClInclude Include="..\..\src\ecs\entity.h" />
     <ClInclude Include="..\..\src\ecs\game_mgr.h" />
@@ -83,6 +84,8 @@
     <ClInclude Include="..\..\src\ecs\system.h" />
     <ClInclude Include="..\..\src\ecs\archetype.h" />
     <ClInclude Include="..\..\src\ecs\tools.h" />
+    <ClInclude Include="..\..\src\ecs\event.h" />
+    <ClInclude Include="..\..\src\ecs\query.h" />
     <ClInclude Include="..\..\src\game\components.h" />
     <ClInclude Include="..\..\src\game\game.h" />
     <ClInclude Include="..\..\src\game\systems.h" />
@@ -129,11 +132,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>../../dependencies/glut/include;$(VC_IncludePath);$(WindowsSDK_IncludePath);../../src;Settings</IncludePath>
+    <OutDir>$(SolutionDir)..\..\Bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>../../src;$(VC_IncludePath);$(WindowsSDK_IncludePath);Settings;../../dependencies/glut/include</IncludePath>
-    <OutDir>$(SolutionDir)..\..\Executable\</OutDir>
+    <OutDir>$(SolutionDir)..\..Bin\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

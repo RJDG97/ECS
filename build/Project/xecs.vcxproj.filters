@@ -252,13 +252,22 @@
     <ClInclude Include="..\..\src\ecs\details\tools_inline.h">
       <Filter>xECS\Details</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ecs\details\entity_inline.h">
-      <Filter>xECS\Details</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\ecs\details\game_mgr_inline.h">
       <Filter>xECS\Details</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ecs\game_mgr.h">
+      <Filter>xECS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\details\event_inline.h">
+      <Filter>xECS\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\details\query_inline.h">
+      <Filter>xECS\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\event.h">
+      <Filter>xECS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ecs\query.h">
       <Filter>xECS</Filter>
     </ClInclude>
   </ItemGroup>

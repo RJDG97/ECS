@@ -7,7 +7,7 @@ namespace ecs::component::pool
         if (m_pComponent[0])
         {
             Clear();
-            for (int i = 0; i < m_Infos.size(); ++i)
+            for (int i = 0; i < m_Infos.size(); i++)
             {
                 VirtualFree(m_pComponent[i], 0, MEM_RELEASE);
             }
@@ -27,11 +27,11 @@ namespace ecs::component::pool
 
     void instance::Initialize( std::span<const component::info* const > Span ) noexcept
     {
-        m_Infos        = Span;
-        for( int i=0; i< m_Infos.size(); ++i )
+        m_Infos = Span;
+        for( int i=0; i< m_Infos.size(); i++ )
         {
             assert(m_Infos[i]->m_Size <= ecs::settings::virtual_page_size_v);
-            auto nPages     = getPageFromIndex( *m_Infos[i], ecs::settings::max_entity_count_per_pool_v ) + 1;
+            auto nPages = getPageFromIndex( *m_Infos[i], ecs::settings::max_entity_count_per_pool_v ) + 1;
             m_pComponent[i] = reinterpret_cast<std::byte*>(VirtualAlloc(nullptr, nPages * ecs::settings::virtual_page_size_v, MEM_RESERVE, PAGE_NOACCESS));
             assert(m_pComponent[i]);
         }
@@ -53,10 +53,10 @@ namespace ecs::component::pool
     {
         assert( m_Size < (ecs::settings::max_entities_v-1) );
 
-        for( int i = 0; i < m_Infos.size(); ++i )
+        for( int i = 0; i < m_Infos.size(); i++ )
         {
-            const auto&   MyInfo  = *m_Infos[i];
-            const auto    NexPage = getPageFromIndex(MyInfo, m_Size+1);
+            const auto& MyInfo  = *m_Infos[i];
+            const auto NexPage = getPageFromIndex(MyInfo, m_Size+1);
 
             // Create pages when needed 
             if( getPageFromIndex(MyInfo, m_Size) != NexPage)
@@ -85,10 +85,10 @@ namespace ecs::component::pool
         
         m_Size--;
 
-        for (int i = 0; i < m_Infos.size(); ++i)
+        for (int i = 0; i < m_Infos.size(); i++)
         {
             const auto& MyInfo = *m_Infos[i];
-            auto        pData = m_pComponent[i];
+            auto pData = m_pComponent[i];
 
             if (Index == m_Size) // Index is last page
             {

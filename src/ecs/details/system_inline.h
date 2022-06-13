@@ -22,13 +22,13 @@ namespace ecs::system
                 {
                     T_USER_SYSTEM::OnUpdate();
                 }
-                //else
-                //{
-                //    xecs::query::instance Query;
-                //    Query.AddQueryFromTuple(xcore::types::null_tuple_v< T_USER_SYSTEM::query >);
-                //    Query.AddQueryFromFunction(*this);
-                //    T_USER_SYSTEM::m_GameMgr.Foreach(T_USER_SYSTEM::m_GameMgr.Search(Query), *this);
-                //}
+                else
+                {
+                    ecs::query::instance Query;
+                    Query.AddQueryFromTuple(xcore::types::null_tuple_v< T_USER_SYSTEM::query >);
+                    Query.AddQueryFromFunction(*this);
+                    T_USER_SYSTEM::m_GameMgr.Foreach(T_USER_SYSTEM::m_GameMgr.Search(Query), *this);
+                }
             }
         };
     }
@@ -43,12 +43,12 @@ namespace ecs::system
         (   // Initialize System
             info
             {
-                .m_System   = std::make_unique< details::completed<T_SYSTEM> >(GameMgr),
+                .m_System = std::make_unique< details::completed<T_SYSTEM> >(GameMgr),
 
-                .m_CallRun  = []( ecs::system::instance& System ) noexcept
+                .m_CallRun = []( ecs::system::instance& System ) noexcept
                 { static_cast<details::completed<T_SYSTEM>&>(System).Run(); }
 
-            ,   .m_pName    = T_SYSTEM::name_v
+            ,   .m_pName = T_SYSTEM::name_v
             }
         );
     }

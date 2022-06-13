@@ -43,10 +43,10 @@ namespace ecs::archetype
                      ) __inline
         void AccessGuard(T_FUNCTION&& Function) noexcept;
 
-        ////---------------------------------------------------------------------------
-        //
-        //inline 
-        //void UpdateStructuralChanges (void) noexcept;
+        //---------------------------------------------------------------------------
+        
+        inline 
+        void UpdateStructuralChanges (void) noexcept;
 
         //---------------------------------------------------------------------------
 

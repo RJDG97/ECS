@@ -2,4 +2,4 @@
 dependencies
 build/Project/x64
 build/Project/.vs
-Executable
+Bin

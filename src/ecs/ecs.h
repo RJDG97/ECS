@@ -33,13 +33,13 @@ namespace ecs::game_mgr
 // FILES
 //--------------------------------------------------------------
 #include "settings.h"
-//#include "xecs_event.h"
+#include "event.h"
 #include "component.h"
 #include "entity.h"
 #include "tools.h"
 #include "pool.h"
 #include "archetype.h"
-//#include "xecs_query.h"
+#include "query.h"
 #include "system.h"
 #include "Game_mgr.h"
 
@@ -51,8 +51,8 @@ namespace ecs::game_mgr
 #include "details/pool_inline.h"
 #include "details/archetype_inline.h"
 #include "details/Game_mgr_inline.h"
-//#include "details/xecs_query_inline.h"
+#include "details/query_inline.h"
 #include "details/tools_inline.h"
-//#include "details/xecs_event_inline.h"
+#include "details/event_inline.h"
 
 #endif
