@@ -1,3 +1,11 @@
+/******************************************************************************
+filename: settings.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains settings for the ecs system
+******************************************************************************/
+
 namespace ecs::settings
 {
     constexpr auto max_component_types_v            = 128;

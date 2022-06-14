@@ -1,3 +1,11 @@
+/******************************************************************************
+filename: pool.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains component memory pool definitions for entities
+******************************************************************************/
+
 namespace ecs::component::pool
 {
     struct instance final

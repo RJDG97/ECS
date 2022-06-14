@@ -1,3 +1,11 @@
+/******************************************************************************
+filename: components.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains game component definitions
+******************************************************************************/
+
 #pragma once
 //---------------------------------------------------------------------------------------
 // COMPONENTS

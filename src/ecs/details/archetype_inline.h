@@ -1,18 +1,21 @@
+/******************************************************************************
+filename: archetype_inline.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains Archetype-Entity manager definitions
+******************************************************************************/
+
 namespace ecs::archetype
 {
     //--------------------------------------------------------------------------------------------
 
     void instance::Initialize
-    ( 
-      std::span<const ecs::component::info* const>  Infos,
-      const tools::bits&                             Bits 
-    ) noexcept
+    ( std::span<const ecs::component::info* const> Infos, const tools::bits& Bits ) noexcept
     {
         // Deep copy the infos just in case the user gave us data driven infos
         for( int i=0; i<Infos.size(); i++ )
-        {
             m_InfoData[i] = Infos[i];
-        }
     
         m_Pool.Initialize( { m_InfoData.data(), Infos.size() } );
         m_ComponentBits = Bits;
@@ -20,26 +23,22 @@ namespace ecs::archetype
 
     //--------------------------------------------------------------------------------------------
 
-    template < typename T_CALLBACK > 
-        requires( 
-                    xcore::function::is_callable_v<T_CALLBACK> &&
-                    std::is_same_v<typename xcore::function::traits<T_CALLBACK>::return_type, void>
-                )
-    ecs::entity::instance instance::CreateEntity( T_CALLBACK&& Function ) noexcept
+    template < typename T_FUNCTIONS >
+    ecs::entity::instance instance::CreateEntity(T_FUNCTIONS&& Function ) noexcept
     {
-        using func_traits = xcore::function::traits<T_CALLBACK>;
+        using func_traits = xcore::function::traits<T_FUNCTIONS>;
 
         return[&]< typename... T_COMPONENTS >(std::tuple<T_COMPONENTS...>*) constexpr noexcept
         {
             assert(m_ComponentBits.getBit(component::info_v<T_COMPONENTS>.m_UID) && ...);
 
             // Allocate the entity component
-            const int   EntityIndexInPool   = m_Pool.Append();
-            const auto  Entity              = m_GameMgr.AllocNewEntity(EntityIndexInPool, *this);
+            const int   EntityIndexInPool = m_Pool.Append();
+            const auto  Entity = m_GameMgr.AllocNewEntity(EntityIndexInPool, *this);
             m_Pool.getComponent<ecs::entity::instance>(EntityIndexInPool) = Entity;
 
             // Call the user initializer if any
-            if constexpr (false == std::is_same_v<ecs::tools::empty_lambda, T_CALLBACK >)
+            if constexpr (false == std::is_same_v<ecs::tools::empty_lambda, T_FUNCTIONS >)
                 Function(m_Pool.getComponent<std::remove_reference_t<T_COMPONENTS>>(EntityIndexInPool) ...);
 
             return Entity;
@@ -53,25 +52,20 @@ namespace ecs::archetype
         // Check if Entity was already destroyed
         assert( Entity.isZombie() == false );
         // Mark for destruction
-        Entity.m_Validation.m_bZombie 
-            = m_GameMgr.m_lEntities[Entity.m_GlobalIndex].m_Validation.m_bZombie
-            = true;
+        Entity.m_Validation.m_bZombie = true;
+        m_GameMgr.m_lEntities[Entity.m_GlobalIndex].m_Validation.m_bZombie = true;
+            
         // Add to delete list
-        m_ToDelete.push_back(Entity);
+        m_lToDelete.push_back(Entity);
         // Delete items on list if no processes are running
         if( 0 == m_ProcessReference ) UpdateStructuralChanges();
     }
 
     //--------------------------------------------------------------------------------------------
      
-    template< typename T_FUNCTION >
-    requires // argument needs to be a function and return void
-    ( 
-        xcore::function::is_callable_v<T_FUNCTION>
-        && std::is_same_v<typename xcore::function::traits<T_FUNCTION>::return_type, void>
-        && xcore::function::traits<T_FUNCTION>::arg_count_v == 0
-    )
-    void instance::AccessGuard( T_FUNCTION&& Function ) noexcept
+    template< typename T_FUNCTIONS >
+    requires ( xcore::function::traits<T_FUNCTIONS>::arg_count_v == 0 )
+    void instance::AccessGuard(T_FUNCTIONS&& Function ) noexcept
     {
         m_ProcessReference++;
         Function();
@@ -83,9 +77,9 @@ namespace ecs::archetype
     void instance::UpdateStructuralChanges( void ) noexcept
     { 
         // Check if items are to be deleted
-        if( m_ToDelete.size() )
+        if(m_lToDelete.size() )
         {   // Delete each entity in the list
-            for( auto& Entity : m_ToDelete )
+            for( auto& Entity : m_lToDelete)
             {
                 auto& EntityDetails = m_GameMgr.getEntityDetails(Entity);
                 // Check if deleting an archetype
@@ -101,7 +95,7 @@ namespace ecs::archetype
                     m_GameMgr.SystemDeleteEntity(Entity);
 
             }
-            m_ToDelete.clear();
+            m_lToDelete.clear();
         }
     }
 }

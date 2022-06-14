@@ -1,3 +1,11 @@
+/******************************************************************************
+filename: tools.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains declerations for tools
+******************************************************************************/
+
 namespace ecs::tools
 {
     using empty_lambda = decltype([]() {});

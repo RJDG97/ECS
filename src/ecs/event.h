@@ -1,13 +1,24 @@
+/******************************************************************************
+filename: event.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains event definitions
+******************************************************************************/
+
 namespace ecs::event
 {
     template< typename...T_ARGS >
     struct instance final
     {
+        //--------------------------------------------------------------
+        // INFO
+        //--------------------------------------------------------------
         struct info
         {
             using callback = void(void* pPtr, T_ARGS...);
-            callback*   m_pCallback;
-            void*       m_pClass;
+            callback* m_pCallback;
+            void* m_pClass;
         };
 
         instance(const instance&) = delete;

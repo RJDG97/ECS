@@ -1,15 +1,21 @@
+/******************************************************************************
+filename: system_inline.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains definitions for systems
+******************************************************************************/
+
 namespace ecs::system
 {
     namespace details 
     {
-        template< typename T_USER_SYSTEM > 
-        // Template needs to be a system instance
-            requires( std::derived_from< T_USER_SYSTEM, ecs::system::instance > )
-        struct completed final : T_USER_SYSTEM
+        template< typename T_SYSTEMS >
+        struct completed final : T_SYSTEMS
         {
             __inline
             completed(ecs::game_mgr::instance& GameMgr) noexcept
-            : T_USER_SYSTEM{ GameMgr }
+            : T_SYSTEMS{ GameMgr }
             {}
 
             completed( void ) noexcept = delete;
@@ -17,25 +23,21 @@ namespace ecs::system
             __inline
             void Run( void ) noexcept
             {
-                // XCORE_PERF_ZONE_SCOPED_N(T_USER_SYSTEM::name_v)
-                if constexpr (&T_USER_SYSTEM::OnUpdate != &instance::OnUpdate)
-                {
-                    T_USER_SYSTEM::OnUpdate();
-                }
+                if constexpr (&T_SYSTEMS::OnUpdate != &instance::OnUpdate)
+                    T_SYSTEMS::OnUpdate();
                 else
                 {
                     ecs::query::instance Query;
-                    Query.AddQueryFromTuple(xcore::types::null_tuple_v< T_USER_SYSTEM::query >);
+                    Query.AddQueryFromTuple(xcore::types::null_tuple_v< T_SYSTEMS::query >);
                     Query.AddQueryFromFunction(*this);
-                    T_USER_SYSTEM::m_GameMgr.Foreach(T_USER_SYSTEM::m_GameMgr.Search(Query), *this);
+                    T_SYSTEMS::m_GameMgr.Foreach(T_SYSTEMS::m_GameMgr.Search(Query), *this);
                 }
             }
         };
     }
 
     //-------------------------------------------------------------------------------------------
-    template < typename T_SYSTEM >
-        requires( std::derived_from< T_SYSTEM, ecs::system::instance> )
+    template < typename T_SYSTEMS >
     void mgr::RegisterSystem( ecs::game_mgr::instance& GameMgr ) noexcept
     { 
         // Add System onto Systems list
@@ -43,12 +45,12 @@ namespace ecs::system
         (   // Initialize System
             info
             {
-                .m_System = std::make_unique< details::completed<T_SYSTEM> >(GameMgr),
+                .m_System = std::make_unique< details::completed<T_SYSTEMS> >(GameMgr),
 
                 .m_CallRun = []( ecs::system::instance& System ) noexcept
-                { static_cast<details::completed<T_SYSTEM>&>(System).Run(); }
+                { static_cast<details::completed<T_SYSTEMS>&>(System).Run(); }
 
-            ,   .m_pName = T_SYSTEM::name_v
+            ,   .m_pName = T_SYSTEMS::name_v
             }
         );
     }

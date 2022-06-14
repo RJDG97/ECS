@@ -1,3 +1,11 @@
+/******************************************************************************
+filename: system.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains declerations for systems
+******************************************************************************/
+
 namespace ecs::system
 {
     //-----------------------------------------------------------------
@@ -5,10 +13,10 @@ namespace ecs::system
     //-----------------------------------------------------------------
     struct overrides
     {
-        using                   query       = std::tuple<>;
-        constexpr static auto   name_v      = "unnamed system";
+        using query = std::tuple<>;
+        constexpr static auto name_v = "unnamed system";
 
-        void                    OnUpdate    ( void ) noexcept {}
+        void OnUpdate( void ) noexcept {}
     };
 
     struct instance : overrides
@@ -24,6 +32,10 @@ namespace ecs::system
         ecs::game_mgr::instance& m_GameMgr;
     };
 
+    template<typename T>
+    concept T_SYSTEMS = requires(T)
+    { (std::derived_from< T, ecs::system::instance>); };
+
     //-----------------------------------------------------------------
     // ECS SYSTEM DEFINITIONS
     //-----------------------------------------------------------------
@@ -34,8 +46,7 @@ namespace ecs::system
 
         mgr( void ) noexcept = default;
 
-        template < typename T_SYSTEM > 
-            requires( std::derived_from< T_SYSTEM, ecs::system::instance> )
+        template < typename T_SYSTEMS >
         void RegisterSystem( ecs::game_mgr::instance& GameMgr ) noexcept;
 
         inline 
@@ -52,6 +63,6 @@ namespace ecs::system
             const char* m_pName;
         };
 
-        std::vector< info >  m_Systems;
+        std::vector< info > m_Systems;
     };
 }

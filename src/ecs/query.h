@@ -1,5 +1,17 @@
+/******************************************************************************
+filename: query.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains query definitions
+******************************************************************************/
+
 namespace ecs::query
 {
+    template<typename T>
+    concept T_FUNCTION = requires(T)
+    { xcore::function::is_callable_v<T>; };
+
     template< typename... T_COMPONENTS >
     struct must final {};
 
@@ -19,7 +31,6 @@ namespace ecs::query
         bool Compare ( const tools::bits& ArchetypeBits ) const noexcept;
 
         template< typename T_FUNCTION > 
-            requires ( xcore::function::is_callable_v<T_FUNCTION> )
         void AddQueryFromFunction( T_FUNCTION&& ) noexcept;
 
         template< typename... T_QUERIES >

@@ -1,3 +1,11 @@
+/******************************************************************************
+filename: event_inline.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains entity event declerations
+******************************************************************************/
+
 namespace ecs::event
 {
     //---------------------------------------------------------------------------
@@ -8,10 +16,10 @@ namespace ecs::event
         m_Delegates.push_back
         (
             info
-            {
-                .m_pCallback = [](void* pPtr, T_ARGS... Args)
+            {   .m_pCallback = [](void* pPtr, T_ARGS... Args)
                 {
-                    std::invoke(T_FUNCTION_PTR_V, reinterpret_cast<T*>(pPtr), std::forward<T_ARGS>(Args)...);
+                    std::invoke(T_FUNCTION_PTR_V, reinterpret_cast<T*>(pPtr),
+                    std::forward<T_ARGS>(Args)...);
                 }
             ,  .m_pClass = &Class
             }
@@ -23,8 +31,6 @@ namespace ecs::event
     void instance<T_ARGS...>::NotifyAll(T_ARGS... Args) const noexcept
     {
         for (auto& E : m_Delegates)
-        {
             E.m_pCallback(E.m_pClass, std::forward<T_ARGS>(Args)...);
-        }
     }
 }

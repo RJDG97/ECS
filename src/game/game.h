@@ -1,3 +1,11 @@
+/******************************************************************************
+filename: game.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains game definitions
+******************************************************************************/
+
 #pragma once
 
 #define GLUT_STATIC_LIB

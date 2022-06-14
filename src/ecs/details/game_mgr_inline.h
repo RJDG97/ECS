@@ -1,3 +1,12 @@
+/******************************************************************************
+filename: game_mgr_inline.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains definitions for the ecs game manager 
+ including registry of components and systems and entity management
+******************************************************************************/
+
 namespace ecs::game_mgr
 {
     //---------------------------------------------------------------------------
@@ -9,15 +18,12 @@ namespace ecs::game_mgr
 
         // Create a link list of empty entries
         for( int i=0; i<(ecs::settings::max_entities_v - 2); i++ )
-        {
             m_lEntities[i].m_PoolIndex = i+1;
-        }
     }
 
     //---------------------------------------------------------------------------
 
     template<typename...T_SYSTEMS> // Ensure args are systems
-    requires( std::derived_from< T_SYSTEMS, ecs::system::instance> && ... )
     void instance::RegisterSystems() noexcept
     {
         (m_SystemMgr.RegisterSystem<T_SYSTEMS>(*this), ... );
@@ -26,7 +32,6 @@ namespace ecs::game_mgr
     //---------------------------------------------------------------------------
 
     template< typename...T_COMPONENTS >// Ensure args are components
-    requires( ((sizeof(T_COMPONENTS) <= ecs::settings::virtual_page_size_v) && ...) )
     void instance::RegisterComponents(void) noexcept
     {
         ((m_ComponentMgr.RegisterComponent<T_COMPONENTS>()), ...);
@@ -38,16 +43,16 @@ namespace ecs::game_mgr
     {
         assert(m_EmptyHead>=0);
 
-        auto  iEntityIndex  = m_EmptyHead;
-        auto& Entry         = m_lEntities[iEntityIndex];
+        auto  iEntityIndex = m_EmptyHead;
+        auto& Entry = m_lEntities[iEntityIndex];
         m_EmptyHead = Entry.m_PoolIndex;
 
-        Entry.m_PoolIndex   = PoolIndex;
-        Entry.m_pArchetype  = &Archetype;
+        Entry.m_PoolIndex = PoolIndex;
+        Entry.m_pArchetype = &Archetype;
         return
         {
-            .m_GlobalIndex        = static_cast<std::uint32_t>(iEntityIndex)
-        ,   .m_Validation         = Entry.m_Validation
+            .m_GlobalIndex = static_cast<std::uint32_t>(iEntityIndex)
+        ,   .m_Validation = Entry.m_Validation
         };
     }
 
@@ -75,8 +80,7 @@ namespace ecs::game_mgr
     void instance::SystemDeleteEntity(ecs::entity::instance DeletedEntity, ecs::entity::instance& SwappedEntity ) noexcept
     { 
         // Swap entities
-        m_lEntities[SwappedEntity.m_GlobalIndex].m_PoolIndex = 
-            m_lEntities[DeletedEntity.m_GlobalIndex].m_PoolIndex;
+        m_lEntities[SwappedEntity.m_GlobalIndex].m_PoolIndex = m_lEntities[DeletedEntity.m_GlobalIndex].m_PoolIndex;
         // Delete entity
         SystemDeleteEntity(DeletedEntity);
     }
@@ -90,6 +94,32 @@ namespace ecs::game_mgr
         Entry.m_Validation.m_bZombie = false;
         Entry.m_PoolIndex            = m_EmptyHead;
         m_EmptyHead = static_cast<int>(DeletedEntity.m_GlobalIndex);
+    }
+
+    //---------------------------------------------------------------------------
+
+    template< typename T_FUNCTIONS>
+    bool instance::findEntity(ecs::entity::instance Entity, T_FUNCTIONS&& Function) const noexcept
+    {
+        if (Entity.isZombie())
+            return false;
+
+        auto& Entry = m_lEntities[Entity.m_GlobalIndex];
+        if (Entry.m_Validation == Entity.m_Validation)
+        {
+            if constexpr (!std::is_same_v< T_FUNCTIONS, ecs::tools::empty_lambda>)
+            {
+                Entry.m_pArchetype->AccessGuard([&]
+                    {
+                        [&] <typename... T_COMPONENTS>(std::tuple<T_COMPONENTS...>*) constexpr noexcept
+                        {
+                            Function(Entry.m_pArchetype->m_Pool.getComponent<std::remove_reference_t<T_COMPONENTS>>(Entry.m_PoolIndex) ...);
+                        }(xcore::types::null_tuple_v<xcore::function::traits<T_FUNCTIONS>::args_tuple>);
+                    });
+            }
+            return true;
+        }
+        return false;
     }
 
     //---------------------------------------------------------------------------
@@ -128,8 +158,7 @@ namespace ecs::game_mgr
     template< typename... T_COMPONENTS >
     std::vector<archetype::instance*> instance::Search(void) const noexcept
     {
-        static constexpr auto ComponentList = std::array{ &component::info_v<T_COMPONENTS>... };
-        return Search(ComponentList);
+        return Search(std::array{ &component::info_v<T_COMPONENTS>... });
     }
 
     //---------------------------------------------------------------------------
@@ -149,15 +178,12 @@ namespace ecs::game_mgr
         for (auto& E : m_lArchetypeBits)
         {
             if ( E.Compare(Query) )
-            {
-                const auto Index = static_cast<std::size_t>( &E - m_lArchetypeBits.data() );
-                return *m_lArchetype[Index];
-            }
+                return *m_lArchetype[static_cast<std::size_t>(&E - m_lArchetypeBits.data())];
         }
 
         // Create Archetype
-        m_lArchetype.push_back      ( std::make_unique<archetype::instance>(*this) );
-        m_lArchetypeBits.push_back  ( Query );
+        m_lArchetype.push_back( std::make_unique<archetype::instance>(*this) );
+        m_lArchetypeBits.push_back( Query );
 
         auto& Archetype = *m_lArchetype.back();
         Archetype.Initialize(Types, Query);
@@ -177,14 +203,11 @@ namespace ecs::game_mgr
 
     //---------------------------------------------------------------------------
 
-    template< typename T_FUNCTION > requires
-    (   
-        xcore::function::is_callable_v<T_FUNCTION> && 
-        std::is_same_v< bool, typename xcore::function::traits<T_FUNCTION>::return_type >
-    )
-    void instance::Foreach( const std::vector<ecs::archetype::instance*>& List, T_FUNCTION&& Function ) const noexcept
+    template< typename T_FUNCTIONS > requires
+    ( std::is_same_v< bool, typename xcore::function::traits<T_FUNCTIONS>::return_type > )
+    void instance::Foreach( const std::vector<ecs::archetype::instance*>& List, T_FUNCTIONS&& Function ) const noexcept
     {
-        using func_traits = xcore::function::traits<T_FUNCTION>;
+        using func_traits = xcore::function::traits<T_FUNCTIONS>;
         // For each entity
         for( const auto& pE : List )
         {
@@ -237,20 +260,16 @@ namespace ecs::game_mgr
                     }
                 }
             });
-            if(bBreak) 
-                break;
+            if(bBreak) break;
         }
     }
 
     //---------------------------------------------------------------------------
-    template< typename T_FUNCTION > requires
-    ( 
-        xcore::function::is_callable_v<T_FUNCTION> && std::is_same_v< void, 
-        typename xcore::function::traits<T_FUNCTION>::return_type >
-    )
-    void instance::Foreach( const std::vector<ecs::archetype::instance*>& List, T_FUNCTION&& Function ) const noexcept
+    template< typename T_FUNCTIONS > requires
+    ( std::is_same_v< void, typename xcore::function::traits<T_FUNCTIONS>::return_type > )
+    void instance::Foreach( const std::vector<ecs::archetype::instance*>& List, T_FUNCTIONS&& Function ) const noexcept
     {
-        using func_traits = xcore::function::traits<T_FUNCTION>;
+        using func_traits = xcore::function::traits<T_FUNCTIONS>;
         
         for( const auto& pE : List )
         {
@@ -299,33 +318,6 @@ namespace ecs::game_mgr
                 }
             });
         }
-    }
-
-    //---------------------------------------------------------------------------
-
-    template< typename T_FUNCTION>
-        requires( xcore::function::is_callable_v<T_FUNCTION> )
-    bool instance::findEntity(ecs::entity::instance Entity, T_FUNCTION&& Function ) const noexcept
-    {
-        if( Entity.isZombie() ) 
-            return false;
-
-        auto& Entry = m_lEntities[Entity.m_GlobalIndex];
-        if( Entry.m_Validation == Entity.m_Validation )
-        {
-            if constexpr ( !std::is_same_v< T_FUNCTION, ecs::tools::empty_lambda> )
-            {
-                Entry.m_pArchetype->AccessGuard([&]
-                {
-                    [&] <typename... T_COMPONENTS>(std::tuple<T_COMPONENTS...>*) constexpr noexcept
-                    {
-                        Function( Entry.m_pArchetype->m_Pool.getComponent<std::remove_reference_t<T_COMPONENTS>>(Entry.m_PoolIndex) ...);
-                    }(xcore::types::null_tuple_v<xcore::function::traits<T_FUNCTION>::args_tuple>);
-                });
-            }
-            return true;
-        }
-        return false;
     }
 
     //---------------------------------------------------------------------------

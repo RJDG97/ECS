@@ -1,3 +1,11 @@
+/******************************************************************************
+filename: query_inline.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains query declerations
+******************************************************************************/
+
 namespace ecs::query
 {
     //---------------------------------------------------------------------------
@@ -26,7 +34,6 @@ namespace ecs::query
     //---------------------------------------------------------------------------
 
     template < typename T_FUNCTION > 
-        requires ( xcore::function::is_callable_v<T_FUNCTION>)
     void instance::AddQueryFromFunction( T_FUNCTION&& ) noexcept
     {
         using func_traits = xcore::function::traits<T_FUNCTION>;

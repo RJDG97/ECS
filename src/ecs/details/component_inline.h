@@ -1,3 +1,11 @@
+/******************************************************************************
+filename: component_inline.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains Component and its manager declerations
+******************************************************************************/
+
 namespace ecs::component
 {
     namespace details

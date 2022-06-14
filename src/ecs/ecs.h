@@ -1,3 +1,11 @@
+/******************************************************************************
+filename: ecs.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains header files related to the ecs
+******************************************************************************/
+
 #ifndef ECS_H
 #define ECS_H
 
@@ -5,9 +13,9 @@
 // HEADER FILES
 //--------------------------------------------------------------
 
-//
+//--------------------------------------------------------------
 // SYSTEM
-//
+//--------------------------------------------------------------
 #define NOMINMAX
 #include "Windows.h"
 
@@ -16,9 +24,9 @@
 #include <array>
 #include <functional>
 
-//
+//--------------------------------------------------------------
 // EXTERNAL DEPENDENCIES
-//
+//--------------------------------------------------------------
 #include "../dependencies/xcore/src/xcore.h"
 
 //--------------------------------------------------------------

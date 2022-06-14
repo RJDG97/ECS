@@ -207,12 +207,6 @@
     <ClInclude Include="..\..\src\game\game.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\game\systems.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\game\components.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\ecs\details\component_inline.h">
       <Filter>xECS\Details</Filter>
     </ClInclude>
@@ -269,6 +263,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\ecs\query.h">
       <Filter>xECS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\game\components.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\game\systems.h">
+      <Filter>Game\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,3 +1,11 @@
+/******************************************************************************
+filename: tools_inline.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains definitions for tools
+******************************************************************************/
+
 namespace ecs::tools
 {
     //------------------------------------------------------------------------------------
@@ -22,10 +30,8 @@ namespace ecs::tools
     bool bits::Compare(const bits& B) const noexcept
     {
         for (int i = 0, size = static_cast<int>(m_Bits.size()); i < size; ++i)
-        {
             if (m_Bits[i] == B.m_Bits[i])
                 return false;
-        }
 
         return true;
     }

@@ -1,3 +1,11 @@
+/******************************************************************************
+filename: pool_inline.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains component memory pool declerations for entities
+******************************************************************************/
+
 namespace ecs::component::pool
 {
     //-------------------------------------------------------------------------------------
@@ -8,9 +16,7 @@ namespace ecs::component::pool
         {
             Clear();
             for (int i = 0; i < m_Infos.size(); i++)
-            {
                 VirtualFree(m_pComponent[i], 0, MEM_RELEASE);
-            }
         }
     }
 
@@ -42,9 +48,7 @@ namespace ecs::component::pool
     void instance::Clear( void ) noexcept
     {
         while(m_Size)
-        {
             Delete(m_Size-1);
-        }
     }
 
     //-------------------------------------------------------------------------------------
@@ -96,19 +100,16 @@ namespace ecs::component::pool
                 if (MyInfo.m_pDestructFn)
                     MyInfo.m_pDestructFn(&pData[m_Size * MyInfo.m_Size]);
             }
+            else if (MyInfo.m_pMoveFn) // If move function is available
+            {   // Move Component from last page into "deleted" page
+                MyInfo.m_pMoveFn(&pData[Index * MyInfo.m_Size], &pData[m_Size * MyInfo.m_Size]);
+            }
             else
-            {
-                if (MyInfo.m_pMoveFn) // If move function is available
-                {   // Move Component from last page into "deleted" page
-                    MyInfo.m_pMoveFn(&pData[Index * MyInfo.m_Size], &pData[m_Size * MyInfo.m_Size]);
-                }
-                else
-                {   // Call component destructor
-                    if (MyInfo.m_pDestructFn)
-                        MyInfo.m_pDestructFn(&pData[Index * MyInfo.m_Size]);
-                    // Copy over Last page into current page
-                    memcpy(&pData[Index * MyInfo.m_Size], &pData[m_Size * MyInfo.m_Size], MyInfo.m_Size);
-                }
+            {   // Call component destructor
+                if (MyInfo.m_pDestructFn)
+                    MyInfo.m_pDestructFn(&pData[Index * MyInfo.m_Size]);
+                // Copy over Last page into current page
+                memcpy(&pData[Index * MyInfo.m_Size], &pData[m_Size * MyInfo.m_Size], MyInfo.m_Size);
             }
             // De Allocate page
             FreePage(MyInfo, pData);

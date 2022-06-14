@@ -1,3 +1,11 @@
+/******************************************************************************
+filename: systems.h
+author: Renzo Joseph D. Garcia renzo.garcia@digipen.edu
+Project: Midterm Project
+Description:
+ This file contains game system definitions
+******************************************************************************/
+
 #pragma once
 
 #include "GL/glut.h"
